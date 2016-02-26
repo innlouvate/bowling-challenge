@@ -2,19 +2,21 @@
 
 describe('Frame', function() {
 
-  var frame
+  var frame;
+  var num;
 
   beforeEach(function() {
     frame = new Frame();
+    num = 4;
   });
 
-  describe('has initialised values', function() {
+  describe('#constructor properties', function() {
     it('to have empty rolls array', function() {
       expect(frame.rolls).toEqual([]);
     });
-    it('frame score to be zero', function() {
-      expect(frame.frameScore).toEqual(0);
-    });
+    // it('frame score to be zero', function() {
+    //   expect(frame.frameScore).toEqual(0);
+    // });
     it('starts with 10 pins', function() {
       expect(frame.pins).toEqual(10);
     });
@@ -22,8 +24,8 @@ describe('Frame', function() {
 
   describe('#roll', function() {
     it('number is added to the rolls array', function() {
-      frame.roll(5);
-      expect(frame.rolls).toContain(5);
+      frame.roll(num);
+      expect(frame.rolls).toContain(num);
     });
     it('pins are reduced by the number', function() {
       frame.roll(6);
@@ -33,6 +35,12 @@ describe('Frame', function() {
       expect(function() {
         frame.roll(11);
       }).toThrowError('Impossible play');
+    });
+    it('throws an error if frame already completed', function() {
+      frame.roll(10);
+      expect(function() {
+        frame.roll(1);
+      }).toThrowError('Frame already completed');
     });
   });
 
@@ -48,6 +56,14 @@ describe('Frame', function() {
     it('is true after a strike', function() {
       frame.roll(10);
       expect(frame.completed()).toBe(true);
+    });
+  });
+
+  describe('#frameScore', function() {
+    it('adds the rolls array', function() {
+      frame.roll(num);
+      frame.roll(num);
+      expect(frame.frameScore()).toEqual(num*2);
     });
   });
 
